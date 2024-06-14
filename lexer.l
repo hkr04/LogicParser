@@ -16,7 +16,7 @@
 "!="           { return NE; }
 [0-9]+         { yylval.value = atoi(yytext); return NUMBER; }
 [ ]+           ; // skip whitespace
-[\r\n]         { return EOF;}
+[\r\n]         { return EOL;}
 .              { return *yytext; }
 
 %%

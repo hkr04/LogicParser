@@ -40,15 +40,16 @@
       know about them.  */
    enum yytokentype {
      NUMBER = 258,
-     AND = 259,
-     OR = 260,
-     LT = 261,
-     LE = 262,
-     GT = 263,
-     GE = 264,
-     EQ = 265,
-     NE = 266,
-     NOT = 267
+     EOL = 259,
+     AND = 260,
+     OR = 261,
+     LT = 262,
+     LE = 263,
+     GT = 264,
+     GE = 265,
+     EQ = 266,
+     NE = 267,
+     NOT = 268
    };
 #endif
 
@@ -65,11 +66,12 @@ typedef union YYSTYPE
     int value, total, optimal;
   }attr;
   int value;
+  char *string;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 73 "parser.tab.h"
+#line 75 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

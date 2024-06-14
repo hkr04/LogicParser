@@ -1,26 +1,13 @@
 3 == 2
-Output: FALSE, 1, 0
 3 > 2
-Output: TRUE, 1, 0
 3 > 2 && 10 > 1
-Output: TRUE, 2, 0
 3 > 2 && 10 > 12
-Output: FALSE, 2, 0
 3 < 2 && 10 > 12
-Output: FALSE, 2, 1
 3 < 2 && 10 < 12
-Output: FALSE, 2, 1
 ( 3 <= 2 || 13 <= 19 ) && 1 < 2
-Output: TRUE, 3, 0
 ( 3 >= 2 || 13 <= 19 ) && 1 < 2
-Output: TRUE, 3, 1
 ( 3 >= 2 || 13 <= 19 ) || 1 < 2
-Output: TRUE, 3, 2
 ! ( 3 > 2 )
-Output: FALSE, 1, 0
 ! ( 3 > 2 || ( 13 < 19 || 1 < 2 ) )
-Output: FALSE, 3, 2
 3 >= 2 || 13 <= 19 && 1 < 2
-Output: TRUE, 3, 2
 3 <= 2 || 13 >= 19 && 1 < 2
-Output: FALSE, 3, 1

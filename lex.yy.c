@@ -670,7 +670,7 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 19 "lexer.l"
-{ return EOF;}
+{ return EOL;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP

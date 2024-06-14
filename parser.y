@@ -11,9 +11,11 @@ int yylex();
     int value, total, optimal;
   }attr;
   int value;
+  char *string;
 }
 
 %token <value> NUMBER
+%token EOL
 %token AND OR
 %token LT LE GT GE EQ NE
 %token NOT
@@ -22,16 +24,26 @@ int yylex();
 %left AND
 %left NOT
 %left LT LE GT GE EQ NE
-
+%start program
 
 %%
 program:
-  expr { 
+  expr EOL { 
     printf("Output: %s, %d, %d\n", 
       $1.value ? "TRUE" : "FALSE", 
       $1.total,
       $1.total - $1.optimal); 
     }
+  | program expr EOL { 
+      printf("Output: %s, %d, %d\n", 
+        $2.value ? "TRUE" : "FALSE", 
+        $2.total,
+        $2.total - $2.optimal); 
+    }
+  | program expr error EOL { 
+      printf("Error in expression.\n");
+    }
+  | EOL
   ;
 
 expr:
