@@ -1582,7 +1582,6 @@ int main()
 #endif
 #line 26 "lexer.l"
 
-int yywrap(void)
-{
+int yywrap(void) {
 	return 1;
 }

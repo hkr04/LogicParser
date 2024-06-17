@@ -46,6 +46,16 @@ program:
     yylineno++;
     yycolno = 0; 
     }
+  | error EOL {
+      yylineno++;
+      yycolno = 0;
+      yyerrok; // 清除错误状态
+    }
+  | program error EOL {
+      yylineno++;
+      yycolno = 0;
+      yyerrok; // 清除错误状态
+    }
   ;
 
 expr:
