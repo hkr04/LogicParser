@@ -17,6 +17,8 @@ int yycolno = 1;
 ">="           { return GE; }
 "=="           { return EQ; }
 "!="           { return NE; }
+"("            { return LBRACE;}
+")"            { return RBRACE;}
 [0-9]+         { yylval.value = atoi(yytext); return NUMBER; }
 [ ]+           ; // skip whitespace
 \n             { yylineno++; return EOL;}

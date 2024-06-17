@@ -9,16 +9,15 @@ int yylex();
 %union {
   struct {
     int value, total, optimal;
-  }attr;
+  } attr;
   int value;
-  char *string;
 }
 
 %token <value> NUMBER
 %token EOL
-%token AND OR
+%token AND OR NOT
 %token LT LE GT GE EQ NE
-%token NOT
+%token LBRACE RBRACE
 %type <attr> expr term
 %left OR
 %left AND
@@ -40,15 +39,11 @@ program:
         $2.total,
         $2.total - $2.optimal); 
     }
-  | program expr error EOL { 
-      printf("Error in expression.\n");
-    }
   ;
 
 expr:
   term { $$ = $1; }
   | expr OR expr { 
-    // printf("expr -> expr(%d) || expr(%d)\n", $1.value, $3.value);
     $$.value = $1.value || $3.value; 
     $$.total = $1.total + $3.total;
     if ($1.value)
@@ -57,7 +52,6 @@ expr:
       $$.optimal = $1.optimal + $3.optimal;
     }
   | expr AND expr { 
-    // printf("expr -> expr(%d) && expr(%d)\n", $1.value, $3.value);
     $$.value = $1.value && $3.value; 
     $$.total = $1.total + $3.total;
     if (!$1.value)
@@ -65,14 +59,12 @@ expr:
     else
       $$.optimal = $1.optimal + $3.optimal;
     }
-  | '(' expr ')' {
-    // printf("expr -> (expr(%d))\n", $2.value);
+  | LBRACE expr RBRACE {
     $$.value = $2.value; 
     $$.total = $2.total;
     $$.optimal = $2.optimal;
   }
   | NOT expr {
-    // printf("expr -> !expr(%d)\n", $2.value);
     $$.value = !$2.value; 
     $$.total = $2.total;
     $$.optimal = $2.optimal;
@@ -80,45 +72,40 @@ expr:
   ;
 
 term:
-  NUMBER { 
-    // printf("term -> NUMBER(%d)\n", $1);
+  NUMBER {
     $$.value = $1; 
     $$.total = 0;
     $$.optimal = 0;
     }
-  | term LT NUMBER { 
-    // printf("term -> term(%d) < NUMBER(%d)\n", $1.value, $3);
-    $$.value = $1.value < $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER LT NUMBER { 
+    $$.value = $1 < $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
-  | term LE NUMBER { 
-    // printf("term -> term(%d) <= NUMBER(%d)\n", $1.value, $3);
-    $$.value = $1.value <= $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER LE NUMBER { 
+    $$.value = $1 <= $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
-  | term GT NUMBER { 
-    // printf("term -> term(%d) > NUMBER(%d)\n", $1.value, $3);
-    $$.value = $1.value > $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER GT NUMBER { 
+    $$.value = $1 > $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
-  | term GE NUMBER { 
-    // printf("term -> term(%d) >= NUMBER(%d)\n", $1.value, $3);
-    $$.value = $1.value >= $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER GE NUMBER { 
+    $$.value = $1 >= $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
-  | term EQ NUMBER { 
-    $$.value = $1.value == $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER EQ NUMBER { 
+    $$.value = $1 == $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
-  | term NE NUMBER { 
-    $$.value = $1.value != $3; 
-    $$.total = $1.total + 1;
-    $$.optimal = $1.optimal + 1;
+  | NUMBER NE NUMBER { 
+    $$.value = $1 != $3; 
+    $$.total = 1;
+    $$.optimal = 1;
     }
   ;
 

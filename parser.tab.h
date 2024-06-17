@@ -43,13 +43,15 @@
      EOL = 259,
      AND = 260,
      OR = 261,
-     LT = 262,
-     LE = 263,
-     GT = 264,
-     GE = 265,
-     EQ = 266,
-     NE = 267,
-     NOT = 268
+     NOT = 262,
+     LT = 263,
+     LE = 264,
+     GT = 265,
+     GE = 266,
+     EQ = 267,
+     NE = 268,
+     LBRACE = 269,
+     RBRACE = 270
    };
 #endif
 
@@ -64,14 +66,13 @@ typedef union YYSTYPE
 
   struct {
     int value, total, optimal;
-  }attr;
+  } attr;
   int value;
-  char *string;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 75 "parser.tab.h"
+#line 76 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
