@@ -43,7 +43,6 @@ program:
   | program expr error EOL { 
       printf("Error in expression.\n");
     }
-  | EOL
   ;
 
 expr:
@@ -125,7 +124,10 @@ term:
 
 %%
 void yyerror(const char *s) {
-  fprintf(stderr, "Error: %s\n", s);
+	extern int yylineno;
+  extern int yycolno;
+	extern char *yytext;
+	fprintf(stderr, "Error: %s near symbol '%s' on line %d, column %d\n", s, yytext, yylineno, yycolno);
 }
 
 int main() {

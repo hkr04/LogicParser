@@ -1,6 +1,9 @@
 %{
 #include "parser.tab.h" 
 #include <string.h>
+
+int yylineno = 1;
+int yycolno = 1;
 %}
 
 %%
@@ -16,8 +19,8 @@
 "!="           { return NE; }
 [0-9]+         { yylval.value = atoi(yytext); return NUMBER; }
 [ ]+           ; // skip whitespace
-[\r\n]         { return EOL;}
-.              { return *yytext; }
+\n             { yylineno++; return EOL;}
+.              { yycolno++; return *yytext; }
 
 %%
 int yywrap(void)
