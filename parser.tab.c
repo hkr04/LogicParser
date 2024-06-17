@@ -73,12 +73,15 @@
 #include <stdio.h>
 #include <string.h>
 
+int yylineno = 1;
+int yycolno = 0;
+
 void yyerror(const char *s);
 int yylex();
 
 
 /* Line 189 of yacc.c  */
-#line 82 "parser.tab.c"
+#line 85 "parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -105,7 +108,7 @@ int yylex();
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     NUMBER = 258,
+     NUM = 258,
      EOL = 259,
      AND = 260,
      OR = 261,
@@ -128,7 +131,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 9 "parser.y"
+#line 12 "parser.y"
 
   struct {
     int value, total, optimal;
@@ -138,7 +141,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 142 "parser.tab.c"
+#line 145 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -150,7 +153,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 154 "parser.tab.c"
+#line 157 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -439,8 +442,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    30,    30,    36,    45,    46,    54,    62,    67,    75,
-      81,    86,    91,    96,   101,   106
+       0,    33,    33,    41,    52,    53,    61,    69,    74,    82,
+      87,    92,    97,   102,   107,   112
 };
 #endif
 
@@ -449,9 +452,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NUMBER", "EOL", "AND", "OR", "NOT",
-  "LT", "LE", "GT", "GE", "EQ", "NE", "LBRACE", "RBRACE", "$accept",
-  "program", "expr", "term", 0
+  "$end", "error", "$undefined", "NUM", "EOL", "AND", "OR", "NOT", "LT",
+  "LE", "GT", "GE", "EQ", "NE", "LBRACE", "RBRACE", "$accept", "program",
+  "expr", "term", 0
 };
 #endif
 
@@ -1352,38 +1355,42 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 30 "parser.y"
+#line 33 "parser.y"
     { 
     printf("Output: %s, %d, %d\n", 
       (yyvsp[(1) - (2)].attr).value ? "TRUE" : "FALSE", 
       (yyvsp[(1) - (2)].attr).total,
       (yyvsp[(1) - (2)].attr).total - (yyvsp[(1) - (2)].attr).optimal); 
+    yylineno++; 
+    yycolno = 0; 
     ;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 36 "parser.y"
+#line 41 "parser.y"
     { 
-      printf("Output: %s, %d, %d\n", 
-        (yyvsp[(2) - (3)].attr).value ? "TRUE" : "FALSE", 
-        (yyvsp[(2) - (3)].attr).total,
-        (yyvsp[(2) - (3)].attr).total - (yyvsp[(2) - (3)].attr).optimal); 
+    printf("Output: %s, %d, %d\n", 
+      (yyvsp[(2) - (3)].attr).value ? "TRUE" : "FALSE", 
+      (yyvsp[(2) - (3)].attr).total,
+      (yyvsp[(2) - (3)].attr).total - (yyvsp[(2) - (3)].attr).optimal); 
+    yylineno++;
+    yycolno = 0; 
     ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 45 "parser.y"
+#line 52 "parser.y"
     { (yyval.attr) = (yyvsp[(1) - (1)].attr); ;}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 46 "parser.y"
+#line 53 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].attr).value || (yyvsp[(3) - (3)].attr).value; 
     (yyval.attr).total = (yyvsp[(1) - (3)].attr).total + (yyvsp[(3) - (3)].attr).total;
@@ -1397,7 +1404,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 54 "parser.y"
+#line 61 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].attr).value && (yyvsp[(3) - (3)].attr).value; 
     (yyval.attr).total = (yyvsp[(1) - (3)].attr).total + (yyvsp[(3) - (3)].attr).total;
@@ -1411,7 +1418,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 62 "parser.y"
+#line 69 "parser.y"
     {
     (yyval.attr).value = (yyvsp[(2) - (3)].attr).value; 
     (yyval.attr).total = (yyvsp[(2) - (3)].attr).total;
@@ -1422,7 +1429,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 67 "parser.y"
+#line 74 "parser.y"
     {
     (yyval.attr).value = !(yyvsp[(2) - (2)].attr).value; 
     (yyval.attr).total = (yyvsp[(2) - (2)].attr).total;
@@ -1433,9 +1440,8 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 75 "parser.y"
-    { 
-    // printf("term -> NUMBER(%d)\n", $1);
+#line 82 "parser.y"
+    {
     (yyval.attr).value = (yyvsp[(1) - (1)].value); 
     (yyval.attr).total = 0;
     (yyval.attr).optimal = 0;
@@ -1445,7 +1451,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 81 "parser.y"
+#line 87 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) < (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1456,7 +1462,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 86 "parser.y"
+#line 92 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) <= (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1467,7 +1473,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 91 "parser.y"
+#line 97 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) > (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1478,7 +1484,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 96 "parser.y"
+#line 102 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) >= (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1489,7 +1495,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 101 "parser.y"
+#line 107 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) == (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1500,7 +1506,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 106 "parser.y"
+#line 112 "parser.y"
     { 
     (yyval.attr).value = (yyvsp[(1) - (3)].value) != (yyvsp[(3) - (3)].value); 
     (yyval.attr).total = 1;
@@ -1511,7 +1517,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1515 "parser.tab.c"
+#line 1521 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1723,12 +1729,15 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 113 "parser.y"
+#line 119 "parser.y"
 
 void yyerror(const char *s) {
-	extern int yylineno;
-  extern int yycolno;
 	extern char *yytext;
+  char buf[512];
+  for (int i = 0; i < yycolno; i++)
+    buf[i] = ' ';
+  sprintf(buf + (yycolno >= 1 ? yycolno - 1 : 0), "\x1b[31m^\x1b[0m\n");
+  fprintf(stderr, "%s", buf);
 	fprintf(stderr, "Error: %s near symbol '%s' on line %d, column %d\n", s, yytext, yylineno, yycolno);
 }
 

@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
+int yylineno = 1;
+int yycolno = 0;
+
 void yyerror(const char *s);
 int yylex();
 %}
@@ -13,7 +16,7 @@ int yylex();
   int value;
 }
 
-%token <value> NUMBER
+%token <value> NUM
 %token EOL
 %token AND OR NOT
 %token LT LE GT GE EQ NE
@@ -32,12 +35,16 @@ program:
       $1.value ? "TRUE" : "FALSE", 
       $1.total,
       $1.total - $1.optimal); 
+    yylineno++; 
+    yycolno = 0; 
     }
   | program expr EOL { 
-      printf("Output: %s, %d, %d\n", 
-        $2.value ? "TRUE" : "FALSE", 
-        $2.total,
-        $2.total - $2.optimal); 
+    printf("Output: %s, %d, %d\n", 
+      $2.value ? "TRUE" : "FALSE", 
+      $2.total,
+      $2.total - $2.optimal); 
+    yylineno++;
+    yycolno = 0; 
     }
   ;
 
@@ -72,37 +79,37 @@ expr:
   ;
 
 term:
-  NUMBER {
+  NUM {
     $$.value = $1; 
     $$.total = 0;
     $$.optimal = 0;
     }
-  | NUMBER LT NUMBER { 
+  | NUM LT NUM { 
     $$.value = $1 < $3; 
     $$.total = 1;
     $$.optimal = 1;
     }
-  | NUMBER LE NUMBER { 
+  | NUM LE NUM { 
     $$.value = $1 <= $3; 
     $$.total = 1;
     $$.optimal = 1;
     }
-  | NUMBER GT NUMBER { 
+  | NUM GT NUM { 
     $$.value = $1 > $3; 
     $$.total = 1;
     $$.optimal = 1;
     }
-  | NUMBER GE NUMBER { 
+  | NUM GE NUM { 
     $$.value = $1 >= $3; 
     $$.total = 1;
     $$.optimal = 1;
     }
-  | NUMBER EQ NUMBER { 
+  | NUM EQ NUM { 
     $$.value = $1 == $3; 
     $$.total = 1;
     $$.optimal = 1;
     }
-  | NUMBER NE NUMBER { 
+  | NUM NE NUM { 
     $$.value = $1 != $3; 
     $$.total = 1;
     $$.optimal = 1;
@@ -111,9 +118,12 @@ term:
 
 %%
 void yyerror(const char *s) {
-	extern int yylineno;
-  extern int yycolno;
 	extern char *yytext;
+  char buf[512];
+  for (int i = 0; i < yycolno; i++)
+    buf[i] = ' ';
+  sprintf(buf + (yycolno >= 1 ? yycolno - 1 : 0), "\x1b[31m^\x1b[0m\n");
+  fprintf(stderr, "%s", buf);
 	fprintf(stderr, "Error: %s near symbol '%s' on line %d, column %d\n", s, yytext, yylineno, yycolno);
 }
 

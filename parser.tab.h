@@ -39,7 +39,7 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     NUMBER = 258,
+     NUM = 258,
      EOL = 259,
      AND = 260,
      OR = 261,
@@ -62,7 +62,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 9 "parser.y"
+#line 12 "parser.y"
 
   struct {
     int value, total, optimal;

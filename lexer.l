@@ -2,30 +2,28 @@
 #include "parser.tab.h" 
 #include <string.h>
 
-int yylineno = 1;
-int yycolno = 1;
+extern int yycolno;
 %}
 
 %%
 
-"&&"           { return AND; }
-"||"           { return OR; }
-"!"            { return NOT; }
-"<"            { return LT; }
-"<="           { return LE; }
-">"            { return GT; }
-">="           { return GE; }
-"=="           { return EQ; }
-"!="           { return NE; }
-"("            { return LBRACE;}
-")"            { return RBRACE;}
-[0-9]+         { yylval.value = atoi(yytext); return NUMBER; }
-[ ]+           ; // skip whitespace
-\n             { yylineno++; return EOL;}
+"&&"           { yycolno += 2; return AND; }
+"||"           { yycolno += 2; return OR; }
+"!"            { yycolno += 1; return NOT; }
+"<"            { yycolno += 1; return LT; }
+"<="           { yycolno += 2; return LE; }
+">"            { yycolno += 1; return GT; }
+">="           { yycolno += 2; return GE; }
+"=="           { yycolno += 2; return EQ; }
+"!="           { yycolno += 2; return NE; }
+"("            { yycolno += 1; return LBRACE;}
+")"            { yycolno += 1; return RBRACE;}
+[+|-]?[0-9]+   { yycolno += strlen(yytext); yylval.value = atoi(yytext); return NUM; }
+[ ]+           { yycolno += strlen(yytext);}
+\n             { yycolno++; return EOL;}
 .              { yycolno++; return *yytext; }
 
 %%
-int yywrap(void)
-{
+int yywrap(void) {
 	return 1;
 }
